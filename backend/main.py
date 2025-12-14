@@ -10,6 +10,7 @@ from db.seed import seed_data, safe_seed_data
 from apis.base import api_router
 from core.minio_client import init_minio
 from core.logging_config import logger
+from fastapi.middleware.cors import CORSMiddleware
 
 
 async def init_models():
@@ -42,5 +43,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title=Settings.PROJECT_NAME, version=Settings.PROJECT_VERSION,
               lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(api_router)

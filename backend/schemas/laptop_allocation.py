@@ -16,6 +16,7 @@ class CreateAllocation(BaseModel):
 
 
 class ShowAllocations(BaseModel):
+    id: uuid.UUID
     user_id: uuid.UUID
     laptop_id: uuid.UUID
     laptop: ShowLaptopCascaded
@@ -30,31 +31,31 @@ class ShowAllocations(BaseModel):
     condition_on_return: Optional[str]
     return_form: Optional[str]
 
-
     class config:
         orm_mode = True
-
 
 
 class ShowAllocationsNested(BaseModel):
     allocation_date: datetime
     allocation_condition: str
-    reason_for_allocation:str
+    reason_for_allocation: str
     is_active: bool
     return_date: Optional[datetime]
 
 
-
 class ModifyAllocation(BaseModel):
     pass
+
 
 class CreateReturn(BaseModel):
     return_date: datetime
     return_comment: str
     condition_on_return: str
 
+
 class UploadAllocationForm(BaseModel):
     allocation_form: str
+
 
 class UploadReturnForm(BaseModel):
     return_form: str

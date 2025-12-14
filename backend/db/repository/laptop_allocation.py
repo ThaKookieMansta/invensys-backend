@@ -293,10 +293,12 @@ async def repo_create_allocation_form(
             "serial_number": allocation.laptop.serial_number,
         },
         "allocation_date": str(allocation.allocation_date),
-        "return_date": str(
-            allocation.return_date) if allocation.return_date else None,
         "allocation_condition": allocation.allocation_condition,
         "reason_for_allocation": allocation.reason_for_allocation,
+        "return_date": str(
+            allocation.return_date) if allocation.return_date else None,
+        "return_comment": allocation.return_comment if allocation.return_comment else None,
+        "condition_on_return": allocation.condition_on_return if allocation.condition_on_return else None,
     }
 
     pdf_bytes = generate_allocation_form(allocation_data, org_config)
@@ -324,6 +326,9 @@ async def repo_create_return_form(allocation, org_config, db: AsyncSession):
             "asset_tag": allocation.laptop.asset_tag,
             "serial_number": allocation.laptop.serial_number,
         },
+        "allocation_date": str(allocation.allocation_date),
+        "allocation_condition": allocation.allocation_condition,
+        "reason_for_allocation": allocation.reason_for_allocation,
         "return_date": str(allocation.return_date),
         "return_comment": allocation.return_comment,
         "condition_on_return": allocation.condition_on_return,
@@ -345,4 +350,3 @@ async def repo_create_return_form(allocation, org_config, db: AsyncSession):
         f"{user.username}: Generated return form for allocation {allocation.id}")
 
     return pdf_bytes
-

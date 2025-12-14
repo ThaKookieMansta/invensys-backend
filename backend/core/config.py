@@ -4,9 +4,10 @@ from pathlib import Path
 
 from sqlalchemy.testing.config import db_url
 
-env_path = Path ('.') / '.env'
+env_path = Path('.') / '.env'
 
 load_dotenv(dotenv_path=env_path)
+
 
 class Settings:
     """
@@ -14,7 +15,7 @@ class Settings:
     """
 
     PROJECT_NAME = "Invensys"
-    PROJECT_VERSION = "1.0.0"
+    PROJECT_VERSION = "1.0.1"
 
     DB_USER = os.getenv("DB_USER")
     DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -36,6 +37,3 @@ class Settings:
     FILESCAN_API_KEY = os.getenv("FILESCAN_API_KEY")
 
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
-
-
-

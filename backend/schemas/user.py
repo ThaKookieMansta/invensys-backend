@@ -13,6 +13,7 @@ class ShowUser(BaseModel):
     username: str
     email_address: EmailStr
     is_active: bool
+    is_superuser: bool
     business_unit: Optional[str]
     department: Optional[str]
     created_at: datetime
@@ -42,7 +43,7 @@ class CreateUser(BaseModel):
 class ModifyUser(BaseModel):
     pass
 
+
 class ChangePassword(BaseModel):
     current_password: Optional[str] = Field(None)
     new_password: str = Field(..., min_length=8)
-

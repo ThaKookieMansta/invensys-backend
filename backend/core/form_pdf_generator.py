@@ -72,10 +72,12 @@ def generate_allocation_form(allocation_data: dict, org_config: dict) -> bytes:
         ["Laptop Serial", allocation_data['laptop']['serial_number']],
         ["Asset Tag", allocation_data['laptop']['asset_tag']],
         ["Allocation Date", format_date(allocation_data['allocation_date'])],
-        ["Return Date",
-         allocation_data.get('return_date', "Not yet returned")],
         ["Condition on Allocation", allocation_data['allocation_condition']],
         ["Reason for Allocation", allocation_data['reason_for_allocation']],
+        ["Return Date",
+         allocation_data.get('return_date', "Not yet returned")],
+        ["Reason for Return", allocation_data['return_comment']],
+        ["Condition on Return", allocation_data['condition_on_return']],
     ], colWidths=[150, 300])
     alloc_table.setStyle(TableStyle([
         ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
