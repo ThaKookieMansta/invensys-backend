@@ -21,7 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from apis.v1.route_login import get_current_user
 from db.models.is_users import User
 from db.repository.accessory import repo_get_an_accessory, \
-    repo_assign_accessory, repo_create_accessory
+    repo_assign_accessory, repo_create_accessory, repo_get_all_accessories
 from db.repository.user import repo_report_unauthorized_access
 from db.sessions import get_db
 from schemas.accessory import CreateAccessory, ShowAccessories
@@ -82,6 +82,35 @@ Fetches details of a specific accessory using its unique ID.
     """
 
     return await repo_get_an_accessory(id, db, admin)
+
+
+@router.get("/get-all-accessories", response_model=list[ShowAccessories],
+            status_code=status.HTTP_202_ACCEPTED)
+async def route_get_all_accessories(
+        db: AsyncSession = Depends(get_db),
+        admin: User = Depends(get_current_user),
+):
+    """
+    **Get All Accessories**
+
+    Retrieves a list of all accessories recorded in the system.
+
+    This endpoint allows administrators to view all laptop-related accessories,
+    such as chargers, bags, mice, or other peripherals that are tracked alongside
+    laptop allocations.
+
+    **Responses:**
+    - **202 Accepted:** Returns a list of accessories available in the system.
+    - **401 Unauthorized:** If the requester is not authenticated or lacks administrator privileges.
+
+    **Returns:**
+    A list of accessories, each including its identifying and descriptive details.
+
+    **Authorization:**
+    Requires administrator privileges.
+    """
+
+    return await repo_get_all_accessories(db, admin)
 
 
 @router.put("/assign-accessory", response_model=ShowAccessories,
