@@ -14,7 +14,7 @@ class CreateRepairHistory(BaseModel):
     date_laptop_repaired: datetime
     cost_of_repair: float
     repair_vendor: str
-    repaired_by: int
+    repaired_by: uuid.UUID
     warranty_covered: bool
     invoice_number: str
 
@@ -27,11 +27,9 @@ class ShowRepairHistory(BaseModel):
     date_laptop_repaired: datetime
     cost_of_repair: float
     repair_vendor: str
-    repaired_by: int
+    repaired_by: uuid.UUID
     warranty_covered: bool
     invoice_number: str
 
-
     class config:
         orm_mode = True
-
