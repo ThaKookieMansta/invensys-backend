@@ -211,6 +211,7 @@ from db.repository.laptop_allocation import repo_create_allocation, \
 from db.sessions import get_db
 from schemas.laptop_allocation import CreateAllocation, ShowAllocations, \
     CreateReturn
+from core.branding import get_logo_path
 
 router = APIRouter()
 
@@ -595,9 +596,11 @@ async def api_generate_form(
     """
 
     allocation = await repo_show_an_allocation(allocation_id, db, current_user)
+    logo = get_logo_path()
 
     org_config = {
-        "logo_path": "core/assets/logo.png",
+        # "logo_path": "core/assets/logo.png",
+        "logo_path": logo,
         "title": "Laptop Allocation Form",
         "doc_number": "IT-AL-001",
         "revision": "03",
