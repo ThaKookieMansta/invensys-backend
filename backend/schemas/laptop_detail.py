@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
+from schemas.business_unit import ShowBusinessUnitName
+
 
 class CreateLaptop(BaseModel):
     laptop_brand: str
@@ -23,7 +25,7 @@ class ShowLaptop(BaseModel):
     laptop_name: str
     asset_tag: Optional[str]
     status_id: int
-    business_unit: str
+    business_unit: Optional[ShowBusinessUnitName]
     created_at: datetime
 
     class config:

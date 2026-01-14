@@ -55,7 +55,7 @@ async def repo_get_laptops(
         db: AsyncSession,
         admin: User,
         laptop_status: Optional[str] = None,
-        business_unit: Optional[str] = None,
+        business_unit_id: Optional[str] = None,
 ):
     details = f"{admin.username} searched through laptops:"
 
@@ -65,9 +65,9 @@ async def repo_get_laptops(
             LaptopStatus.status_name == laptop_status)
         log_laptop_status = laptop_status.value
         details = f"{details} status = {log_laptop_status}"
-    if business_unit is not None:
-        query = query.where(LaptopDetail.business_unit == business_unit)
-        details = f"{details} business unit = {business_unit}"
+    if business_unit_id is not None:
+        query = query.where(LaptopDetail.business_unit_id == business_unit_id)
+        details = f"{details} business unit = {business_unit_id}"
     result = await db.execute(query)
 
     logger.info(details)

@@ -16,19 +16,24 @@ class LaptopDetail(Base):
                                           default=uuid.uuid4)
     laptop_brand: Mapped[str] = mapped_column(String)
     laptop_model: Mapped[str] = mapped_column(String, nullable=False)
-    serial_number: Mapped[str] = mapped_column(String, nullable=False, unique=True)
-    laptop_name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    serial_number: Mapped[str] = mapped_column(String, nullable=False,
+                                               unique=True)
+    laptop_name: Mapped[str] = mapped_column(String, nullable=False,
+                                             unique=True)
     asset_tag: Mapped[str] = mapped_column(String)
     status_id: Mapped[int] = mapped_column(ForeignKey('is_laptopstatus.id'))
-    business_unit: Mapped[str] = mapped_column(String)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    business_unit_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),
+                                                        ForeignKey(
+                                                            "is_businessunit.id"),
+                                                        nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime,
+                                                 default=datetime.now)
 
     allocations: Mapped[list["LaptopAllocation"]] = relationship(
         "LaptopAllocation",
         back_populates="laptop",
         lazy="selectin"
     )
-
 
     repairs: Mapped[list["RepairHistory"]] = relationship(
         "RepairHistory",
@@ -42,3 +47,4 @@ class LaptopDetail(Base):
         foreign_keys=[status_id],
         lazy="selectin"
     )
+    business_unit = relationship("BusinessUnit", lazy="selectin")

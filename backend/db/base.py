@@ -9,3 +9,4 @@ from db.models.is_laptop_details import LaptopDetail
 from db.models.is_laptop_allocation import LaptopAllocation
 from db.models.is_laptop_procurement import LaptopProcurement
 from db.models.is_repair_history import RepairHistory
+from db.models.is_org_details import Department, BusinessUnit

@@ -26,9 +26,8 @@ def iso_header_footer(canvas, doc, org_config):
 
     canvas.drawString(
         40, 820,
-        f"{org_config.get('title', 'Laptop Allocation Form')} | "
-        f"Doc No: {org_config.get('doc_number', 'N/A')} | "
-        f"Rev: {org_config.get('revision', '01')}"
+        f"{org_config.get('org_name')} | "
+        f"{org_config.get('title', 'Laptop Allocation Form')}"
     )
 
     canvas.drawRightString(
@@ -81,23 +80,6 @@ def generate_allocation_form(allocation_data: dict, org_config: dict) -> bytes:
 
     elements.append(header_table)
     elements.append(Spacer(1, 12))
-
-    # ===== Document Control Block =====
-    control_block = Table([
-        ["Doc No", org_config.get("doc_number", "N/A"),
-         "Revision", org_config.get("revision", "01")],
-        ["Approved By", org_config.get("approved_by", "IT Manager"),
-         "Date", datetime.now().strftime("%d-%m-%Y")],
-    ], colWidths=[80, 160, 80, 130])
-
-    control_block.setStyle(TableStyle([
-        ("GRID", (0, 0), (-1, -1), 0.75, colors.black),
-        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-    ]))
-
-    elements.append(control_block)
-    elements.append(Spacer(1, 20))
 
     # ===== Allocation Details =====
     elements.append(Paragraph("1. Allocation Details", styles["Heading2"]))

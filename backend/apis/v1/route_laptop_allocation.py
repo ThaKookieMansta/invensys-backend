@@ -208,6 +208,7 @@ from db.repository.laptop_allocation import repo_create_allocation, \
     repo_upload_form, repo_download_form, repo_upload_return_form, \
     repo_download_return_form, repo_create_allocation_form, \
     repo_create_return_form
+from db.repository.organization import repo_get_organization_name
 from db.sessions import get_db
 from schemas.laptop_allocation import CreateAllocation, ShowAllocations, \
     CreateReturn
@@ -594,6 +595,7 @@ async def api_generate_form(
     Requires authentication.
     Only administrators are authorized to generate forms.
     """
+    org_name = await repo_get_organization_name(db=db, admin=current_user)
 
     allocation = await repo_show_an_allocation(allocation_id, db, current_user)
     logo = get_logo_path()
@@ -601,18 +603,19 @@ async def api_generate_form(
     org_config = {
         # "logo_path": "core/assets/logo.png",
         "logo_path": logo,
-        "title": "Laptop Allocation Form",
+        "org_name": f"{org_name}",
+        "title": f"Laptop {form_type.capitalize()} Form",
         "doc_number": "IT-AL-001",
         "revision": "03",
         "approved_by": "Head of IT",
         "watermark": "CONFIDENTIAL",
     }
 
-    if form_type == "allocation":
+    if form_type.lower() == "allocation":
         pdf_bytes = await repo_create_allocation_form(allocation, org_config,
                                                       db)
         alloc_filename = f"{allocation.user.username}_allocation_form.pdf"
-    elif form_type == "return":
+    elif form_type.lower() == "return":
         pdf_bytes = await repo_create_return_form(allocation, org_config, db)
         alloc_filename = f"{allocation.user.username}_return_form.pdf"
     else:

@@ -47,9 +47,9 @@ from db.models.is_users import User
 from db.repository.user import repo_create_user, repo_get_a_user, \
     repo_delete_a_user, repo_get_all_users, repo_change_user_password, \
     repo_change_user_status, repo_change_user_permission, \
-    repo_report_unauthorized_access, repo_change_my_password
+    repo_report_unauthorized_access, repo_change_my_password, repo_update_user
 from db.sessions import get_db
-from schemas.user import CreateUser, ShowUser, ChangePassword
+from schemas.user import CreateUser, ShowUser, ChangePassword, ModifyUser
 
 router = APIRouter()
 
@@ -132,10 +132,6 @@ async def api_get_all_users(
                                           description="Filter by User status"),
         username: Optional[str] = Query(None,
                                         description="Filter by Username"),
-        business_unit: Optional[str] = Query(None,
-                                             description="Filter by Business Unit"),
-        department: Optional[str] = Query(None,
-                                          description="Filter by Department"),
 ):
     """
     **Get All Users**
@@ -146,8 +142,6 @@ async def api_get_all_users(
     **Query Parameters:**
     - `username` (*str*, optional): Filter by a specific username.
     - `is_active` (*bool*, optional): Filter users by active status (`true` or `false`).
-    - `business_unit` (*str*, optional): Filter users belonging to a specific business unit.
-    - `department` (*str*, optional): Filter users belonging to a specific department.
 
     **Responses:**
     - **200 OK:** Returns a list of users matching the provided filters, or all users if no filters are applied.
@@ -166,8 +160,6 @@ async def api_get_all_users(
         admin=current_user,
         is_active=is_active,
         username=username,
-        business_unit=business_unit,
-        department=department
     )
 
 
@@ -308,6 +300,26 @@ async def api_change_user_permission(
             task_logged="Elevate / Demote User", table_name="is_user",
             admin=current_user, db=db)
     return await repo_change_user_permission(username, db, admin=current_user)
+
+
+@router.put("/update-a-user", response_model=ShowUser,
+            status_code=status.HTTP_202_ACCEPTED)
+async def api_update_a_user(
+        updated_data: ModifyUser,
+        username: str,
+        db: AsyncSession = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    if not current_user.is_superuser:
+        return repo_report_unauthorized_access(
+            task_logged="Modify user details",
+            table_name="is_user",
+            admin=current_user,
+            db=db
+        )
+
+    return await repo_update_user(updated_user=updated_data, username=username,
+                                  db=db, admin=current_user)
 
 
 @router.delete("/delete-a-user", status_code=status.HTTP_202_ACCEPTED)
