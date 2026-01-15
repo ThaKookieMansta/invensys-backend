@@ -14,7 +14,7 @@ class CreateLaptop(BaseModel):
     laptop_name: str
     asset_tag: Optional[str]
     status_id: Optional[int]
-    business_unit: uuid.UUID
+    business_unit_id: uuid.UUID
 
 
 class ShowLaptop(BaseModel):

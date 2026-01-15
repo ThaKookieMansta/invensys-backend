@@ -21,7 +21,7 @@ async def repo_new_laptop(laptop: CreateLaptop, db: AsyncSession, admin: User):
         laptop_name=laptop.laptop_name.lower(),
         asset_tag=laptop.asset_tag,
         status_id=laptop.status_id,
-        business_unit=laptop.business_unit,
+        business_unit_id=laptop.business_unit_id,
 
     )
 
